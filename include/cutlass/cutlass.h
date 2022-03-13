@@ -52,11 +52,11 @@ namespace cutlass {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #if defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
-#define CUTLASS_HOST_DEVICE __forceinline__ __device__ __host__
-#define CUTLASS_DEVICE __forceinline__ __device__
+#define CUTLASS_HOST_DEVICE  __device__ __host__
+#define CUTLASS_DEVICE  __device__
 #elif defined(__CUDACC_RTC__)
-#define CUTLASS_HOST_DEVICE __forceinline__ __device__
-#define CUTLASS_DEVICE __forceinline__ __device__
+#define CUTLASS_HOST_DEVICE  __device__
+#define CUTLASS_DEVICE  __device__
 #else
 #define CUTLASS_HOST_DEVICE inline
 #define CUTLASS_DEVICE inline
