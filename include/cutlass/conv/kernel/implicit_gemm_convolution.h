@@ -51,7 +51,7 @@ namespace kernel {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-  __global__ void get_smid_kernel() {
+  __global__ __noinline__ void get_smid_kernel() {
       printf("Hello World from GPU!\n");
   }
 
@@ -261,7 +261,7 @@ struct ImplicitGemmConvolution {
   CUTLASS_HOST_DEVICE
   ImplicitGemmConvolution() { } 
 
-  CUTLASS_DEVICE
+  CUTLASS_DEVICE __noinline__
   uint get_smid(void) {
       uint ret;
       asm("mov.u32 %0, %smid;" : "=r"(ret) );
@@ -269,25 +269,25 @@ struct ImplicitGemmConvolution {
   }
 
 
-  CUTLASS_DEVICE
+  CUTLASS_DEVICE __noinline__
   void printf_smid(void) {
       uint smid = get_smid();
       printf("sm id = %d\n", smid);
   }
 
   /// Executes one ImplicitGEMM
-  CUTLASS_DEVICE
+  CUTLASS_DEVICE __noinline__
   void operator()(Params const &params, SharedStorage &shared_storage) {
 
     // #1 kernel call device
-    // uint smid = get_smid();
-    // printf("sm id = %d\n", smid);
+    uint smid = get_smid();
+    printf("sm id = %d\n", smid);
 
     // #2 kernel call kernel
     // get_smid_kernel<<<64, 1024>>>();
 
     // #3 kernel call device and the device also call device
-    printf_smid();
+    // printf_smid();
 
     // Compute threadblock location
     ThreadblockSwizzle threadblock_swizzle;
